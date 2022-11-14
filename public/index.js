@@ -54,7 +54,7 @@ window.broadcast = async () => {
 
 //-------------------------------------------------------------------------
 
-async function registerPeriodicNewsCheck() {
+async function registerNotification() {
   const registration = await navigator.serviceWorker.ready;
   try {
     await registration.periodicSync.register("get-latest-news", {
@@ -65,7 +65,7 @@ async function registerPeriodicNewsCheck() {
   }
 }
 
-async function unregisterPeriodicNewsCheck() {
+async function unregisterNotification() {
   navigator.serviceWorker.ready.then((registration) => {
     registration.periodicSync.unregister("get-latest-news");
   });
