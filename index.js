@@ -40,7 +40,7 @@ webpushSetVapidDetail();
 
 //-----------------------------------
 
-app.get("update", (req, res) => {
+app.get("/update", (req, res) => {
   res.send({
     update: true,
   });
