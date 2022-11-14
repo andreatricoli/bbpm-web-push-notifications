@@ -61,7 +61,7 @@ window.registerNotification = async () => {
       try {
         // Register new sync every 24 hours
         await registration.periodicSync.register("get-latest-news", {
-          minInterval: 24 * 60 * 60 * 1000, // 1 day
+          minInterval: 10 * 1000, // 1 day
         });
         console.log("Periodic background sync registered!");
       } catch (e) {
