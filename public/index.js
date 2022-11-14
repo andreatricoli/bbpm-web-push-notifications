@@ -17,12 +17,6 @@ const urlBase64ToUint8Array = (base64String) => {
   return outputArray;
 };
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js", {
-    scope: "/",
-  });
-}
-
 window.subscribe = async () => {
   if (!("serviceWorker" in navigator)) return;
 
@@ -57,26 +51,27 @@ window.broadcast = async () => {
 window.registerNotification = async () => {
   if (!("serviceWorker" in navigator)) return;
   const registration = await navigator.serviceWorker.ready;
-  try {
-    if (registration.periodicSync) {
-      console.log("Periodic Background Sync is supported.");
-      const status = await navigator.permissions.query({
-        name: "periodic-background-sync",
-      });
-      if (status.state === "granted") {
-        console.log("Periodic background sync granted");
+  if ("periodicSync" in registration) {
+    // Request permission
+    const status = await navigator.permissions.query({
+      name: "periodic-background-sync",
+    });
+
+    if (status.state === "granted") {
+      try {
+        // Register new sync every 24 hours
         await registration.periodicSync.register("get-latest-news", {
-          minInterval: 30 * 1000,
+          minInterval: 24 * 60 * 60 * 1000, // 1 day
         });
-      } else {
-        console.log("Periodic background sync cannot be used.");
+        console.log("Periodic background sync registered!");
+      } catch (e) {
+        console.error(`Periodic background sync failed:\nx${e}`);
       }
     } else {
-      console.log("Periodic Background Sync is not supported");
+      console.info("Periodic background sync is not granted.");
     }
-  } catch (error) {
-    console.log(error);
-    console.log("Periodic Sync could not be registered!");
+  } else {
+    console.log("Periodic background sync is not supported.");
   }
 };
 
@@ -102,4 +97,12 @@ function syncAttendees() {
       console.log(attendees);
       self.registration.showNotification(`There is a new update`);
     });
+}
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js", {
+    scope: "/",
+  });
+
+  registerNotification();
 }
