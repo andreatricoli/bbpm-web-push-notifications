@@ -54,22 +54,37 @@ window.broadcast = async () => {
 
 //-------------------------------------------------------------------------
 
-async function registerNotification() {
+window.registerNotification = async () => {
+  if (!("serviceWorker" in navigator)) return;
   const registration = await navigator.serviceWorker.ready;
   try {
-    await registration.periodicSync.register("get-latest-news", {
-      minInterval: 30 * 1000,
-    });
-  } catch {
+    if (registration.periodicSync) {
+      console.log("Periodic Background Sync is supported.");
+      const status = await navigator.permissions.query({
+        name: "periodic-background-sync",
+      });
+      if (status.state === "granted") {
+        console.log("Periodic background sync granted");
+        await registration.periodicSync.register("get-latest-news", {
+          minInterval: 30 * 1000,
+        });
+      } else {
+        console.log("Periodic background sync cannot be used.");
+      }
+    } else {
+      console.log("Periodic Background Sync is not supported");
+    }
+  } catch (error) {
+    console.log(error);
     console.log("Periodic Sync could not be registered!");
   }
-}
+};
 
-async function unregisterNotification() {
+window.unregisterNotification = async () => {
   navigator.serviceWorker.ready.then((registration) => {
     registration.periodicSync.unregister("get-latest-news");
   });
-}
+};
 
 // window.fetchAndCacheLatestNews = async () => {
 //   await fetch("/update", {
