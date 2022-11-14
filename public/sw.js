@@ -8,14 +8,24 @@ self.addEventListener("push", (e) => {
 
 //-----------------------------------------------------------
 
-function syncAttendees() {
-  return update({ url: `/update` })
-    .then(refresh)
-    .then((attendees) => {
-      console.log(attendees);
-      self.registration.showNotification(`There is a new update`);
-    });
-}
+const syncAttendees = async () => {
+  const response = await fetch("/update", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+
+  console.log(response);
+  self.registration.showNotification(`There is a new update`);
+
+  // return update({ url: `/update` })
+  //   .then(refresh)
+  //   .then((attendees) => {
+  //     console.log(attendees);
+  //     self.registration.showNotification(`There is a new update`);
+  //   });
+};
 
 self.addEventListener("periodicsync", (event) => {
   console.log("event periodcsync");
