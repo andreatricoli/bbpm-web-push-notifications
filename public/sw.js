@@ -8,6 +8,15 @@ self.addEventListener("push", (e) => {
 
 //-----------------------------------------------------------
 
+function syncAttendees() {
+  return update({ url: `/update` })
+    .then(refresh)
+    .then((attendees) => {
+      console.log(attendees);
+      self.registration.showNotification(`There is a new update`);
+    });
+}
+
 self.addEventListener("periodicsync", (event) => {
   console.log("event periodcsync");
   console.log(event);

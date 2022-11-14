@@ -90,15 +90,6 @@ window.unregisterNotification = async () => {
 //   });
 // };
 
-function syncAttendees() {
-  return update({ url: `/update` })
-    .then(refresh)
-    .then((attendees) => {
-      console.log(attendees);
-      self.registration.showNotification(`There is a new update`);
-    });
-}
-
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js", {
     scope: "/",
