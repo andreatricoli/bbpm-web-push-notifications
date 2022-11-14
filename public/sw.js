@@ -27,7 +27,7 @@ const syncAttendees = async () => {
   //   });
 };
 
-setInterval(syncAttendees, 10000);
+// setInterval(syncAttendees, 10000);
 
 self.addEventListener("periodicsync", (event) => {
   console.log("event periodcsync");
