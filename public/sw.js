@@ -9,6 +9,8 @@ self.addEventListener("push", (e) => {
 //-----------------------------------------------------------
 
 self.addEventListener("periodicsync", (event) => {
+  console.log("event periodcsync");
+  console.log(event);
   if (event.tag === "get-latest-news") {
     console.log("event get latest news");
     event.waitUntil(syncAttendees());
