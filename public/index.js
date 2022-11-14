@@ -60,9 +60,13 @@ window.registerNotification = async () => {
     if (status.state === "granted") {
       try {
         // Register new sync every 24 hours
-        await registration.periodicSync.register("get-latest-news", {
-          minInterval: 10 * 1000, // 1 day
-        });
+        const periodicSycn = await registration.periodicSync.register(
+          "get-latest-news",
+          {
+            minInterval: 10 * 1000, // 1 day
+          }
+        );
+        console.log(periodicSycn);
         console.log("Periodic background sync registered!");
       } catch (e) {
         console.error(`Periodic background sync failed:\nx${e}`);
